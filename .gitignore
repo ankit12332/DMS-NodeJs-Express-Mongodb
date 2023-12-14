@@ -1,0 +1,10 @@
+# Dependency directories
+node_modules/
+
+# Environment configuration
+#.env
+
+# IDE specific files
+.idea/
+*.iml
+.vscode/
