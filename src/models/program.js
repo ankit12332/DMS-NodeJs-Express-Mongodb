@@ -9,11 +9,19 @@ const programSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  path: {
+    type: String,
+    required: true
+  },
   module: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Module',
     required: true
-  }
+  },
+  roles: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Role'
+  }]
 });
 
 module.exports = mongoose.model('Program', programSchema);
