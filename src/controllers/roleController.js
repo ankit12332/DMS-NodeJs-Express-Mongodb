@@ -20,20 +20,43 @@ exports.getAllRoles = async (req, res) => {
             .populate({
                 path: 'programs',
                 model: 'Program',
-                select: 'title description path module _id', // Excluding the _id and roles of programs
                 populate: {
                     path: 'module',
-                    model: 'Module',
-                    select: 'moduleName _id' // Selecting only moduleName and excluding _id
+                    model: 'Module'
                 }
-            })
-            .select('roleName programs _id'); // Selecting roleName and programs, excluding _id of role
+            });
 
-        res.status(200).send(roles);
+        // Transforming the data to group programs under modules
+        const transformedRoles = roles.map(role => {
+            let modules = {};
+
+            role.programs.forEach(program => {
+                const moduleId = program.module._id.toString();
+                if (!modules[moduleId]) {
+                    modules[moduleId] = {
+                        moduleName: program.module.moduleName,
+                        programs: []
+                    };
+                }
+                modules[moduleId].programs.push({
+                    title: program.title,
+                    description: program.description,
+                    path: program.path
+                });
+            });
+
+            return {
+                roleName: role.roleName,
+                modules: Object.values(modules)
+            };
+        });
+
+        res.status(200).send(transformedRoles);
     } catch (error) {
         res.status(500).send(error);
     }
 };
+
 
 
 // Get a single role by ID
