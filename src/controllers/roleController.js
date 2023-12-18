@@ -26,7 +26,7 @@ exports.getAllRoles = async (req, res) => {
                 }
             });
 
-        // Transforming the data to group programs under modules
+        // Transforming the data to group programs under modules and include IDs
         const transformedRoles = roles.map(role => {
             let modules = {};
 
@@ -34,11 +34,13 @@ exports.getAllRoles = async (req, res) => {
                 const moduleId = program.module._id.toString();
                 if (!modules[moduleId]) {
                     modules[moduleId] = {
+                        moduleId: moduleId, // Include module ID
                         moduleName: program.module.moduleName,
                         programs: []
                     };
                 }
                 modules[moduleId].programs.push({
+                    programId: program._id, // Include program ID
                     title: program.title,
                     description: program.description,
                     path: program.path
@@ -46,6 +48,7 @@ exports.getAllRoles = async (req, res) => {
             });
 
             return {
+                roleId: role._id, // Include role ID
                 roleName: role.roleName,
                 modules: Object.values(modules)
             };
