@@ -47,7 +47,11 @@ const patientSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  documents: [{
+    name: String,
+    filePath: String
+}]
 });
 
 module.exports = mongoose.model('Patient', patientSchema);

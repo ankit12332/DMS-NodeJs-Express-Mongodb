@@ -59,3 +59,26 @@ exports.getAllPatients = async (req, res) => {
         res.status(500).send(error);
     }
 };
+
+//Upload documents to a patient
+exports.uploadDocuments = async (req, res) => {
+    try {
+      const patientId = req.body.patientId; // Assuming patient's ID is passed in the request body
+      const files = req.files; // Array of files
+  
+      // Create an array of document objects for updating the patient document
+      const documentUpdates = files.map(file => ({
+        name: file.filename,
+        filePath: file.path
+      }));
+  
+      // Update patient's documents
+      await Patient.findByIdAndUpdate(patientId, {
+        $push: { documents: { $each: documentUpdates } }
+      });
+  
+      res.status(200).send({ message: 'Documents uploaded successfully', files: files });
+    } catch (error) {
+      res.status(500).send({ message: 'Error uploading documents', error: error });
+    }
+  };
