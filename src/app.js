@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
+const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const moduleRoutes = require('./routes/moduleRoutes');
@@ -13,6 +14,12 @@ const port = process.env.PORT || 3000;
 
 // Connect to Database
 connectDB();
+
+// Enable CORS Middleware
+app.use(cors({
+  origin: 'https://dms-react-next-js.vercel.app' // Replace with your frontend app's URL
+}));
+
 
 // Middlewares
 app.use(express.json());
