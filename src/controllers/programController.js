@@ -13,7 +13,8 @@ exports.createProgram = async (req, res) => {
     const newProgram = new Program({
       title: req.body.title,
       description: req.body.description,
-      module: req.body.module
+      module: req.body.module,
+      path:req.body.path
     });
 
     await newProgram.save();

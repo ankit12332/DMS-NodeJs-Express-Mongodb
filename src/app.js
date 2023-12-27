@@ -17,7 +17,7 @@ connectDB();
 
 // Enable CORS Middleware
 app.use(cors({
-  origin: 'https://dms-react-next-js.vercel.app' // Replace with your frontend app's URL
+  origin: 'http://localhost:3001' // Replace with your frontend app's URL
 }));
 
 
