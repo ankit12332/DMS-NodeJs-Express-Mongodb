@@ -16,7 +16,8 @@ router.put('/:id', userController.updateUser);
 router.delete('/:id', userController.deleteUser);
 
 // List all users (protected route)
-router.get('/', authenticate, userController.listUsers); // Apply authenticate middleware here
+//router.get('/', authenticate, userController.listUsers); // Apply authenticate middleware here
+router.get('/', userController.listUsers);
 
 // Assign roles to a user
 router.post('/:userId/roles', userController.addRolesToUser);
