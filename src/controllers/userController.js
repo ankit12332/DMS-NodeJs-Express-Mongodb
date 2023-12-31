@@ -9,6 +9,7 @@ exports.createUser = async (req, res) => {
     
     const user = new User({
       name: req.body.name,
+      employeeCode: req.body.employeeCode,
       email: req.body.email,
       username: req.body.username,
       password: hashedPassword,
@@ -47,6 +48,7 @@ exports.getUser = async (req, res) => {
     const transformedUser = {
       id: user._id,
       name: user.name,
+      employeeCode: user.employeeCode,
       email: user.email,
       username: user.username,
       createdAt: user.createdAt,
