@@ -6,9 +6,9 @@ exports.createProgram = async (req, res) => {
   try {
     // Check if the module exists
     const module = await Module.findById(req.body.module);
-    if (!module) {
-      return res.status(404).json({ error: "Module not found" });
-    }
+    // if (!module) {
+    //   return res.status(404).json({ error: "Module not found" });
+    // }
 
     const newProgram = new Program({
       title: req.body.title,

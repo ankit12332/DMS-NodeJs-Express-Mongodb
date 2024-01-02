@@ -15,8 +15,7 @@ const programSchema = new mongoose.Schema({
   },
   module: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Module',
-    required: true
+    ref: 'Module'
   },
   roles: [{
     type: mongoose.Schema.Types.ObjectId,
