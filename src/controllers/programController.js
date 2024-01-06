@@ -50,15 +50,25 @@ exports.getProgramById = async (req, res) => {
 // Update a program by ID
 exports.updateProgram = async (req, res) => {
   try {
-    const program = await Program.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('module');
+    // Check if the module field is provided in the request body
+    const updateData = req.body;
+    if (!('module' in req.body)) {
+      // Explicitly set the module to null if it's not provided
+      updateData.module = null;
+    }
+
+    // Find the program and update it
+    const program = await Program.findByIdAndUpdate(req.params.id, updateData, { new: true }).populate('module');
     if (!program) {
       return res.status(404).json({ error: "Program not found" });
     }
+
     res.json(program);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 // Delete a program by ID
 exports.deleteProgram = async (req, res) => {
