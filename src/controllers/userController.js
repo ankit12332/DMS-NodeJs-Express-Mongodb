@@ -112,10 +112,64 @@ exports.deleteUser = async (req, res) => {
 };
 
 // List all users
+// exports.listUsers = async (req, res) => {
+//   try {
+//     const users = await User.find({});
+//     res.json(users);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+// exports.listUsers = async (req, res) => {
+//   try {
+//     const page = parseInt(req.query.page) || 1;
+//     const limit = parseInt(req.query.limit) || 100;
+//     const skip = (page - 1) * limit;
+
+//     const users = await User.find({}).skip(skip).limit(limit);
+//     const total = await User.countDocuments({});
+
+//     res.json({ data: users, total, page, limit });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
 exports.listUsers = async (req, res) => {
   try {
-    const users = await User.find({});
-    res.json(users);
+    const startRow = parseInt(req.query.startRow) || 0;
+    const endRow = parseInt(req.query.endRow) || 10;
+
+    const skip = startRow;
+    const limit = endRow - startRow;
+
+    const sortField = req.query.sortField || 'createdAt';
+    const sortOrder = req.query.sortOrder === 'asc' ? 1 : (req.query.sortOrder === 'desc' ? -1 : 1);
+
+    const searchText = req.query.searchText;
+
+    let filter = {};
+    if (searchText) {
+      filter = {
+        $or: [
+          { username: { $regex: searchText, $options: 'i' } },
+          { name: { $regex: searchText, $options: 'i' } },
+          { employeeCode: { $regex: searchText, $options: 'i' } }
+        ]
+      };
+    }
+
+    let sort = {};
+    sort[sortField] = sortOrder;
+
+    // Fetching users with pagination, sorting, and search filter
+    // Include allowDiskUse: true to handle large sorting operations
+    const users = await User.find(filter).sort(sort).skip(skip).limit(limit).allowDiskUse(true);
+
+    const totalCount = await User.countDocuments(filter);
+
+    res.json({ data: users, totalCount });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
